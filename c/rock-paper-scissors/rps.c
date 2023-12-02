@@ -11,6 +11,27 @@ void clearBuffer(){
     while(getchar() != '\n');
 }
 
+int getGameWinner(int *userChoice, int *computerChoice, int *score){
+    // return 0 = player wins
+    // return 1 = tie
+    // return 2 = computer wins
+    if (*userChoice == 1 && *computerChoice == 3){
+        score[0]++;
+        return 0;
+    } else if (*userChoice == 2 && *computerChoice == 1){
+        score[0]++;
+        return 0;
+    } else if (*userChoice == 3 && *computerChoice == 2){
+        score[0]++;
+        return 0;
+    } else if (*userChoice == *computerChoice){
+        score[1]++;
+        return 1;
+    } else {
+        score[2]++;
+        return 2;
+    }
+}
 
 int getUserInput(int *score){
     int userChoice;
@@ -20,18 +41,13 @@ int getUserInput(int *score){
         printf("Enter your choice: ");
         if (scanf("%d", &userChoice) != 1 || userChoice < 1 || userChoice > 3){
             system("clear");
-            printf("\n\nInvalid input.\n\n");
+            printf("Invalid input.\n\n");
             clearBuffer();
             continue;
         }
         break;
     }
     return userChoice;
-}
-
-int getComputerChoice(){
-    srand(time(NULL));
-    return (rand() % 3) + 1;
 }
 
 char* getChoiceName(int *choice){
@@ -48,26 +64,9 @@ char* getChoiceName(int *choice){
     }
 }
 
-int getGameWinner(int *userChoice, int *computerChoice, int *score){
-    // return 2 = tie
-    // return 1 = player wins
-    // return 0 = computer wins
-    if (*userChoice == 1 && *computerChoice == 3){
-        score[0]++;
-        return 1;
-    } else if (*userChoice == 2 && *computerChoice == 1){
-        score[0]++;
-        return 1;
-    } else if (*userChoice == 3 && *computerChoice == 2){
-        score[0]++;
-        return 1;
-    } else if (*userChoice == *computerChoice){
-        score[1]++;
-        return 2;
-    } else {
-        score[2]++;
-        return 0;
-    }
+int getComputerChoice(){
+    srand(time(NULL));
+    return (rand() % 3) + 1;
 }
 
 void main(){
@@ -87,25 +86,23 @@ void main(){
 
         // get winner
         int winner = getGameWinner(&userChoice, &computerChoice, score);
-
+        
+        // print winner
         system("clear");
         printf("Score: %d-%d-%d\n\n", score[0], score[1], score[2]);
         printf("Player Choice = %s\nComputer Choice = %s\n\n", userChoiceName, computerChoiceName);
-
-        // print winner
         switch (winner){
             case 0:
-                printf("YOU LOST.\n\n");
-                break;
-            case 1:
                 printf("YOU WIN.\n\n");
                 break;
-            case 2:
+            case 1:
                 printf("TIE.\n\n");
                 break;
+            case 2:
+                printf("YOU LOST.\n\n");
+                break;
         }
-
         printf("Press ENTER to continue...");
-        while(getchar() != '\n');   // clear buffer at same time as waiting for key press
+        while(getchar() != '\n');       // wait for key press and clear buffer hack
     }
 }
